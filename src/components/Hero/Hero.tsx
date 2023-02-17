@@ -28,9 +28,7 @@ export default function Hero() {
           }}
         />
         <Header />
-        <div className="hero-content flex-col lg:flex-row-reverse">
-          {/* Pokemon stats */}
-          <HeroPokeCard />
+        <div className="hero-content flex-col lg:flex-row">
           <div>
             <h1 className="text-5xl font-bold">Pokedex</h1>
             <p className="py-6 pr-3">
@@ -40,6 +38,7 @@ export default function Hero() {
             </p>
             <button className="btn-primary btn">Get Started</button>
           </div>
+          <HeroPokeCard />
         </div>
       </div>
     </>
