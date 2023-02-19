@@ -2,13 +2,6 @@ import { Header } from './Header'
 import { HeroPokeCard } from './HeroPokeCard'
 import { PokeButton } from 'components/PokeButton'
 
-const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' }
-]
-
 export default function Hero() {
   return (
     <>
@@ -35,10 +28,12 @@ export default function Hero() {
             <p className="py-6 pr-3">
               Check pokemon stats, description and more.
             </p>
-            <PokeButton>Get Started</PokeButton>
+            <a href="#site-more">
+              <PokeButton>Get Started</PokeButton>
+            </a>
           </div>
           <div className="lg:w-1/2">
-            <HeroPokeCard />
+            <HeroPokeCard pokemonName="charmander" />
           </div>
         </div>
       </div>

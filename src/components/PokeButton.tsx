@@ -1,10 +1,10 @@
 import React from 'react'
 
-type ButtonProps = {
+type Props = {
   BtnW: string
 }
 
-export const PokeButton: React.FunctionComponent<ButtonProps> = ({
+export const PokeButton: React.FunctionComponent<Props> = ({
   children,
   BtnW
 }) => (

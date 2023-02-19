@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 import { PokeButton } from 'components/PokeButton'
+import { Type } from 'components/Type'
 
-import { colorTypes } from 'colorTypes'
+type Props = {
+  pokemonName: string
+}
 
-export const HeroPokeCard = () => {
+export const HeroPokeCard: React.FunctionComponent<Props> = ({
+  pokemonName
+}) => {
   const [pokemon, setPokemon] = useState({
     name: '',
     index: '',
@@ -14,14 +19,9 @@ export const HeroPokeCard = () => {
     imgUrl: ''
   })
 
-  const getTypeColor = (type: string): string => {
-    const foundType = colorTypes.find((item) => item.name === type)
-    return foundType?.color || ''
-  }
-
   const fetchPokemonData = async () => {
     return axios
-      .get('https://pokeapi.co/api/v2/pokemon/charmander/')
+      .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}/`)
       .then((res) => {
         setPokemon({
           name: res.data.name,
@@ -34,7 +34,7 @@ export const HeroPokeCard = () => {
 
   const fetchPokemonDescription = async () => {
     return axios
-      .get(`https://pokeapi.co/api/v2/pokemon-species/charmander`)
+      .get(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`)
       .then((res) => {
         let description
 
@@ -71,22 +71,7 @@ export const HeroPokeCard = () => {
         <p className="text-2xl font-bold capitalize">{pokemon.name}</p>
         <div className="my-2 flex justify-center gap-2 lg:mx-0 lg:justify-start">
           {pokemon.types.map((type) => (
-            <div
-              className="flex gap-1 rounded-lg p-2 shadow-lg"
-              style={{
-                backgroundColor: getTypeColor(type.type.name),
-                boxShadow: `0 0 20px ${getTypeColor(type.type.name)}`
-              }}
-            >
-              <img
-                src={`/src/assets/pokemonTypes/${type.type.name}.svg`}
-                alt={type.type.name}
-                className="h-8"
-              />
-              <p className="my-auto text-lg font-medium capitalize text-white">
-                {type.type.name}
-              </p>
-            </div>
+            <Type pokeType={type.type.name} key={type.type.name} />
           ))}
         </div>
         <p className="text-md my-4 text-justify">{pokemon.description}</p>
