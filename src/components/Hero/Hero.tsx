@@ -1,5 +1,6 @@
 import { Header } from './Header'
 import { HeroPokeCard } from './HeroPokeCard'
+import { PokeButton } from 'components/PokeButton'
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -11,9 +12,9 @@ const navigation = [
 export default function Hero() {
   return (
     <>
-      <div className="hero min-h-screen">
+      <div className="hero min-h-screen text-white">
         <img
-          src="https://imgs.search.brave.com/gmvfsWd_YMWjnie209NGc43vnJ-dz33f050OEKic_SM/rs:fit:1200:1200:1/g:ce/aHR0cDovL2dldHdh/bGxwYXBlcnMuY29t/L3dhbGxwYXBlci9m/dWxsL2IvNS83LzE0/NTgwOTItYmVhdXRp/ZnVsLXBva2Vtb24t/bW92aWUtd2FsbHBh/cGVyLTM4NDB4MjE2/MC1mb3ItYW5kcm9p/ZC01MC5qcGc"
+          src="https://imgs.search.brave.com/cwGvC8RZYcsBLvaIlqqglK_gI5GP1nYfJRpD6d6HAS4/rs:fit:1200:1080:1/g:ce/aHR0cDovL3dhbGxw/YXBlcmNhdmUuY29t/L3dwL0thcVBPT3Eu/anBn"
           alt="background image"
           className="object-cover"
           style={{
@@ -29,16 +30,16 @@ export default function Hero() {
         />
         <Header />
         <div className="hero-content flex-col lg:flex-row">
-          <div>
+          <div className="lg:w-1/2">
             <h1 className="text-5xl font-bold">Pokedex</h1>
             <p className="py-6 pr-3">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
+              Check pokemon stats, description and more.
             </p>
-            <button className="btn-primary btn">Get Started</button>
+            <PokeButton>Get Started</PokeButton>
           </div>
-          <HeroPokeCard />
+          <div className="lg:w-1/2">
+            <HeroPokeCard />
+          </div>
         </div>
       </div>
     </>

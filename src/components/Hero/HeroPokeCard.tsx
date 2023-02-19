@@ -60,7 +60,7 @@ export const HeroPokeCard = () => {
   }, [])
 
   return (
-    <div className="flex flex-col gap-4 rounded-lg bg-base-300/90 p-4 text-center shadow-xl drop-shadow-lg lg:flex-row-reverse lg:text-left">
+    <div className="flex flex-col gap-4 rounded-lg bg-base-300/90 p-4 text-center shadow-xl drop-shadow-lg lg:flex-row-reverse lg:text-left ">
       <img
         src={pokemon.imgUrl}
         alt="charmander"
