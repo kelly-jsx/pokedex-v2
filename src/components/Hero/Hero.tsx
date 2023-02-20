@@ -2,7 +2,7 @@ import { Header } from './Header'
 import { HeroPokeCard } from './HeroPokeCard'
 import { PokeButton } from 'components/PokeButton'
 
-export default function Hero({ handleClick, pokemon }) {
+export default function Hero({ handleClick, pokemon, imageType }) {
   return (
     <>
       <div className="hero min-h-screen text-white">
@@ -33,7 +33,11 @@ export default function Hero({ handleClick, pokemon }) {
             </a>
           </div>
           <div className="lg:w-1/2">
-            <HeroPokeCard handleClick={handleClick} pokemonName={pokemon} />
+            <HeroPokeCard
+              handleClick={handleClick}
+              pokemonName={pokemon}
+              imageType={imageType}
+            />
           </div>
         </div>
       </div>

@@ -21,9 +21,7 @@ export default function App() {
   const [itemsPerPage, setItemsPerPage] = useState(9)
   const [totalItems, setTotalItems] = useState(1008)
 
-  const [imageType, setImageType] = useState(
-    'data.sprites.other.dream_world.front_default'
-  )
+  const [imageType, setImageType] = useState('dreamworld')
 
   const [allPokemons, setAllPokemons] = useState([])
   const [selectedPokemon, setSelectedPokemon] = useState({
@@ -71,10 +69,20 @@ export default function App() {
     return axios.get(`${ApiUrl}pokemon/${pokemon}`).then((res) => {
       const data = res.data
 
+      let sprites
+
+      if (imageType === 'dreamworld') {
+        sprites = data.sprites.other.dream_world.front_default
+      } else if (imageType === 'home') {
+        sprites = data.sprites.other.home.front_default
+      } else if (imageType === 'pixel') {
+        sprites = data.sprites.front_default
+      }
+
       setSelectedPokemon({
         index: data.id,
         name: data.name,
-        imgUrl: imageType,
+        imgUrl: sprites,
         types: data.types,
         height: data.height,
         weight: data.weight,
@@ -125,14 +133,34 @@ export default function App() {
     fetchAllPokemons(itemsPerPage, page)
   }
 
+  const handleChangeImageType = (e) => {
+    setImageType(e.target.value)
+  }
+
   return (
     <>
       <Hero
         pokemon={heroPokemon}
         handleClick={() => handleClickPokemon(heroPokemon)}
+        imageType={imageType}
       />
       <div id="site-more" className="flex flex-col py-4">
         <SiteActions />
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">
+              Pick your favourite style of Pokemon images
+            </span>
+          </label>
+          <select
+            className="select-bordered select"
+            onChange={handleChangeImageType}
+          >
+            <option value={'dreamworld'}>Dream World</option>
+            <option value={'pixel'}>Pixel</option>
+            <option value={'home'}>Home</option>
+          </select>
+        </div>
         <div className="divider" />
         <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
           <div className="place-self-center lg:place-self-start">
@@ -150,9 +178,13 @@ export default function App() {
                 index={allPokemons[item].id}
                 name={allPokemons[item].name}
                 image={
-                  // allPokemons[item].sprites.other.dream_world.front_default
-                  allPokemons[item].sprites.front_default
-                  // allPokemons[item].sprites.other.home.front_default
+                  imageType === 'dreamworld'
+                    ? allPokemons[item].sprites.other.dream_world.front_default
+                    : imageType === 'home'
+                    ? allPokemons[item].sprites.other.home.front_default
+                    : imageType === 'pixel'
+                    ? allPokemons[item].sprites.front_default
+                    : null
                 }
                 type={allPokemons[item].types}
                 handleClick={() => handleClickPokemon(allPokemons[item].name)}

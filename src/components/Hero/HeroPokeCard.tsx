@@ -8,11 +8,13 @@ import { InfoModal } from 'components/InfoModal'
 type Props = {
   pokemonName: string
   handleClick: any
+  imageType: any
 }
 
 export const HeroPokeCard: React.FunctionComponent<Props> = ({
   pokemonName,
-  handleClick
+  handleClick,
+  imageType
 }) => {
   const [pokemon, setPokemon] = useState({
     name: '',
@@ -26,11 +28,21 @@ export const HeroPokeCard: React.FunctionComponent<Props> = ({
     return axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}/`)
       .then((res) => {
+        let sprites
+
+        if (imageType === 'dreamworld') {
+          sprites = res.data.sprites.other.dream_world.front_default
+        } else if (imageType === 'home') {
+          sprites = res.data.sprites.other.home.front_default
+        } else if (imageType === 'pixel') {
+          sprites = res.data.sprites.front_default
+        }
+
         setPokemon({
           name: res.data.name,
           index: res.data.id,
           types: res.data.types,
-          imgUrl: res.data.sprites.other.dream_world.front_default
+          imgUrl: sprites
         })
       })
   }
@@ -60,7 +72,7 @@ export const HeroPokeCard: React.FunctionComponent<Props> = ({
   useEffect(() => {
     fetchPokemonData()
     fetchPokemonDescription()
-  }, [])
+  })
 
   return (
     <>
