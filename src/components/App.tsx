@@ -11,8 +11,20 @@ import { Footer } from './Footer'
 export default function App() {
   const ApiUrl = 'https://pokeapi.co/api/v2/'
 
+  const [showModal, setShowModal] = useState(false)
   const [allPokemons, setAllPokemons] = useState([])
-  const [selectedPokemon, setSelectedPokemon] = useState(null)
+  const [selectedPokemon, setSelectedPokemon] = useState({
+    index: '',
+    name: '',
+    imgUrl: '',
+    types: [],
+    height: '',
+    weight: '',
+    category: '',
+    description: '',
+    abilities: [],
+    stats: []
+  })
 
   useEffect(() => {
     fetchAllPokemons(0, 151)
@@ -40,6 +52,63 @@ export default function App() {
 
     setAllPokemons(pokemonArr)
   }
+
+  const fetchPokemonDetails = async (pokemon) => {
+    return axios.get(`${ApiUrl}pokemon/${pokemon}`).then((res) => {
+      const data = res.data
+
+      setSelectedPokemon({
+        index: data.id,
+        name: data.name,
+        imgUrl: data.sprites.other.dream_world.front_default,
+        types: data.types,
+        height: data.height,
+        weight: data.weight,
+        abilities: data.abilities,
+        stats: data.stats
+      })
+    })
+  }
+
+  const fetchPokemonSpecies = async (pokemon) => {
+    try {
+      const res = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon-species/${pokemon}`
+      )
+      const data = res.data
+      let category
+      let description
+
+      for (let i = 0; i < data.genera.length; i++) {
+        if (data.genera[i].language.name === 'en') {
+          category = data.genera[i].genus
+          break
+        }
+      }
+
+      for (let j = 0; j < data.flavor_text_entries.length; j++) {
+        if (data.flavor_text_entries[j].language.name === 'en') {
+          description = data.flavor_text_entries[j].flavor_text
+          break
+        }
+      }
+
+      setSelectedPokemon((prevPokemon) => ({
+        ...prevPokemon,
+        description: description,
+        category: category
+      }))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleClickPokemon = (pokemon) => {
+    fetchPokemonDetails(pokemon)
+    fetchPokemonSpecies(pokemon)
+    setShowModal(true)
+  }
+
   return (
     <>
       <Hero />
@@ -56,6 +125,7 @@ export default function App() {
               name={allPokemons[item].name}
               image={allPokemons[item].sprites.other.dream_world.front_default}
               type={allPokemons[item].types}
+              handleClick={() => handleClickPokemon(allPokemons[item].name)}
             />
           ))}
         </div>
@@ -69,7 +139,20 @@ export default function App() {
         </div>
       </div>
       <Footer />
-      <InfoModal />
+      {showModal ? (
+        <InfoModal
+          index={selectedPokemon.index}
+          name={selectedPokemon.name}
+          imgUrl={selectedPokemon.imgUrl}
+          type={selectedPokemon.types}
+          height={selectedPokemon.height}
+          weight={selectedPokemon.weight}
+          category={selectedPokemon.category}
+          description={selectedPokemon.description}
+          abilities={selectedPokemon.abilities}
+          stats={selectedPokemon.stats}
+        />
+      ) : null}
     </>
   )
 }

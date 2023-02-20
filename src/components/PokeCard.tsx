@@ -3,7 +3,7 @@ import React from 'react'
 import { Type } from './Type'
 import { getTypeColor } from 'utils'
 
-export const PokeCard = ({ index, name, image, type }) => {
+export const PokeCard = ({ index, name, image, type, handleClick }) => {
   let finalColor = []
 
   if (type.length === 2) {
@@ -19,7 +19,7 @@ export const PokeCard = ({ index, name, image, type }) => {
   }
 
   return (
-    <label htmlFor="info-modal">
+    <label htmlFor="info-modal" onClick={handleClick}>
       <div
         className="hover:scale-103 cursor-pointer  rounded-lg bg-base-300 text-center text-black shadow-lg transition ease-in-out hover:-translate-y-1.5"
         style={{

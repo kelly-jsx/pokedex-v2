@@ -9,7 +9,7 @@ type Props = {
 export const Type: React.FunctionComponent<Props> = ({ pokeType }) => {
   return (
     <div
-      className="flex w-max gap-1 rounded-lg p-2 shadow-lg"
+      className="flex w-max cursor-default gap-1 rounded-lg p-2 shadow-lg"
       style={{
         backgroundColor: getTypeColor(pokeType),
         boxShadow: `0 0 20px ${getTypeColor(pokeType)}`
