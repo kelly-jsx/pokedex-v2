@@ -7,11 +7,24 @@ import { SiteActions } from './SiteActions'
 import { PokeCard } from './PokeCard'
 import { InfoModal } from './InfoModal'
 import { Footer } from './Footer'
+import { Pagination } from './Pagination'
 
 export default function App() {
   const ApiUrl = 'https://pokeapi.co/api/v2/'
 
-  const [showModal, setShowModal] = useState(false)
+  const heroPokemon = 'charmander'
+
+  const [limit, setLimit] = useState(151)
+  const [offset, setOffset] = useState(0)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(9)
+  const [totalItems, setTotalItems] = useState(1008)
+
+  const [imageType, setImageType] = useState(
+    'data.sprites.other.dream_world.front_default'
+  )
+
   const [allPokemons, setAllPokemons] = useState([])
   const [selectedPokemon, setSelectedPokemon] = useState({
     index: '',
@@ -27,10 +40,11 @@ export default function App() {
   })
 
   useEffect(() => {
-    fetchAllPokemons(0, 151)
+    fetchAllPokemons(itemsPerPage, currentPage)
   }, [])
 
-  const fetchAllPokemons = async (offset, limit) => {
+  const fetchAllPokemons = async (limit, page) => {
+    const offset = itemsPerPage * (page - 1)
     const res = await axios
       .get(`${ApiUrl}pokemon?limit=${limit}&offset=${offset}`)
       .catch((err) => console.log(err))
@@ -60,7 +74,7 @@ export default function App() {
       setSelectedPokemon({
         index: data.id,
         name: data.name,
-        imgUrl: data.sprites.other.dream_world.front_default,
+        imgUrl: imageType,
         types: data.types,
         height: data.height,
         weight: data.weight,
@@ -72,9 +86,7 @@ export default function App() {
 
   const fetchPokemonSpecies = async (pokemon) => {
     try {
-      const res = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon-species/${pokemon}`
-      )
+      const res = await axios.get(`${ApiUrl}pokemon-species/${pokemon}`)
       const data = res.data
       let category
       let description
@@ -106,53 +118,70 @@ export default function App() {
   const handleClickPokemon = (pokemon) => {
     fetchPokemonDetails(pokemon)
     fetchPokemonSpecies(pokemon)
-    setShowModal(true)
+  }
+
+  const handleChangePage = (page) => {
+    setCurrentPage(page)
+    fetchAllPokemons(itemsPerPage, page)
   }
 
   return (
     <>
-      <Hero />
-      {/* <Counter /> */}
-
+      <Hero
+        pokemon={heroPokemon}
+        handleClick={() => handleClickPokemon(heroPokemon)}
+      />
       <div id="site-more" className="flex flex-col py-4">
         <SiteActions />
         <div className="divider" />
-        <div className="mx-4 mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7">
-          {Object.keys(allPokemons).map((item) => (
-            <PokeCard
-              key={allPokemons[item].id}
-              index={allPokemons[item].id}
-              name={allPokemons[item].name}
-              image={allPokemons[item].sprites.other.dream_world.front_default}
-              type={allPokemons[item].types}
-              handleClick={() => handleClickPokemon(allPokemons[item].name)}
+        <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
+          <div className="place-self-center lg:place-self-start">
+            <Pagination
+              currentPage={currentPage}
+              onPageSelect={handleChangePage}
+              total={totalItems}
+              itemsPerPage={itemsPerPage}
             />
-          ))}
-        </div>
-        <div className="place-self-center">
-          <div className="btn-group">
-            <button className="btn">1</button>
-            <button className="btn-active btn">2</button>
-            <button className="btn">3</button>
-            <button className="btn">4</button>
+          </div>
+          <div className="mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3">
+            {Object.keys(allPokemons).map((item) => (
+              <PokeCard
+                key={allPokemons[item].id}
+                index={allPokemons[item].id}
+                name={allPokemons[item].name}
+                image={
+                  // allPokemons[item].sprites.other.dream_world.front_default
+                  allPokemons[item].sprites.front_default
+                  // allPokemons[item].sprites.other.home.front_default
+                }
+                type={allPokemons[item].types}
+                handleClick={() => handleClickPokemon(allPokemons[item].name)}
+              />
+            ))}
+          </div>
+          <div className="place-self-center">
+            <Pagination
+              currentPage={currentPage}
+              onPageSelect={handleChangePage}
+              total={totalItems}
+              itemsPerPage={itemsPerPage}
+            />
           </div>
         </div>
       </div>
       <Footer />
-      {showModal ? (
-        <InfoModal
-          index={selectedPokemon.index}
-          name={selectedPokemon.name}
-          imgUrl={selectedPokemon.imgUrl}
-          type={selectedPokemon.types}
-          height={selectedPokemon.height}
-          weight={selectedPokemon.weight}
-          category={selectedPokemon.category}
-          description={selectedPokemon.description}
-          abilities={selectedPokemon.abilities}
-          stats={selectedPokemon.stats}
-        />
-      ) : null}
+      <InfoModal
+        index={selectedPokemon.index}
+        name={selectedPokemon.name}
+        imgUrl={selectedPokemon.imgUrl}
+        type={selectedPokemon.types}
+        height={selectedPokemon.height}
+        weight={selectedPokemon.weight}
+        category={selectedPokemon.category}
+        description={selectedPokemon.description}
+        abilities={selectedPokemon.abilities}
+        stats={selectedPokemon.stats}
+      />
     </>
   )
 }
