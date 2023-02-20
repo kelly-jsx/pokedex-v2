@@ -1,17 +1,12 @@
 import React from 'react'
 
-import { colorTypes } from 'colorTypes'
+import { getTypeColor } from 'utils'
 
 type Props = {
   pokeType: string
 }
 
 export const Type: React.FunctionComponent<Props> = ({ pokeType }) => {
-  const getTypeColor = (type: string): string => {
-    const foundType = colorTypes.find((item) => item.name === type)
-    return foundType?.color || ''
-  }
-
   return (
     <div
       className="flex w-max gap-1 rounded-lg p-2 shadow-lg"
