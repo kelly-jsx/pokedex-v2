@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { Counter } from 'utils/Counter'
 import Hero from './Hero/Hero'
-import { SiteActions } from './SiteActions'
+import { SiteActions } from './SiteActions/SiteActions'
 import { PokeCard } from './PokeCard'
 import { InfoModal } from './InfoModal'
 import { Footer } from './Footer'
@@ -145,22 +145,7 @@ export default function App() {
         imageType={imageType}
       />
       <div id="site-more" className="flex flex-col py-4">
-        <SiteActions />
-        <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">
-              Pick your favourite style of Pokemon images
-            </span>
-          </label>
-          <select
-            className="select-bordered select"
-            onChange={handleChangeImageType}
-          >
-            <option value={'dreamworld'}>Dream World</option>
-            <option value={'pixel'}>Pixel</option>
-            <option value={'home'}>Home</option>
-          </select>
-        </div>
+        <SiteActions handleChangeImageType={handleChangeImageType} />
         <div className="divider" />
         <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
           <div className="place-self-center lg:place-self-start">

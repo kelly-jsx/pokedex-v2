@@ -72,16 +72,18 @@ export const HeroPokeCard: React.FunctionComponent<Props> = ({
   useEffect(() => {
     fetchPokemonData()
     fetchPokemonDescription()
-  })
+  }, [imageType])
 
   return (
     <>
       <div className="flex flex-col gap-4 rounded-lg bg-base-300/90 p-4 text-center shadow-xl drop-shadow-lg lg:flex-row-reverse lg:text-left ">
-        <img
-          src={pokemon.imgUrl}
-          alt="charmander"
-          className="m-auto h-40 lg:h-auto lg:w-80"
-        />
+        <div className="h-full">
+          <img
+            src={pokemon.imgUrl}
+            alt={pokemon.name}
+            className="my-auto h-full lg:h-auto lg:w-80"
+          />
+        </div>
         <div className="mt-0 h-full">
           <h2 className="text-lg">#{String(pokemon.index).padStart(3, '0')}</h2>
           <p className="text-2xl font-bold capitalize">{pokemon.name}</p>
