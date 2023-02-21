@@ -8,3 +8,7 @@ export function getTypeColor(type: string): string {
   const foundType = colorTypes.find((item) => item.name === type)
   return foundType?.color || ''
 }
+
+export function timeout(delay: number) {
+  return new Promise((resolve) => setTimeout(resolve, delay))
+}

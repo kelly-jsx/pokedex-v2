@@ -17,7 +17,8 @@ export const InfoModal = ({
   category,
   description,
   abilities,
-  stats
+  stats,
+  handleCloseModal
 }) => {
   let finalColor = []
 
@@ -47,6 +48,7 @@ export const InfoModal = ({
             <label
               htmlFor="info-modal"
               className="btn-sm btn-circle btn absolute right-2 top-2"
+              onClick={() => handleCloseModal}
             >
               ✕
             </label>

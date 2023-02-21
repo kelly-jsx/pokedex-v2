@@ -8,6 +8,9 @@ import { PokeCard } from './PokeCard'
 import { InfoModal } from './InfoModal'
 import { Footer } from './Footer'
 import { Pagination } from './Pagination'
+import { setTimeout } from 'timers/promises'
+
+import { timeout } from 'utils'
 
 export default function App() {
   const ApiUrl = 'https://pokeapi.co/api/v2/'
@@ -128,6 +131,22 @@ export default function App() {
     fetchPokemonSpecies(pokemon)
   }
 
+  const handleCloseModal = async () => {
+    await timeout(500)
+    setSelectedPokemon({
+      index: '',
+      name: '',
+      imgUrl: '',
+      types: [],
+      height: '',
+      weight: '',
+      category: '',
+      description: '',
+      abilities: [],
+      stats: []
+    })
+  }
+
   const handleChangePage = (page) => {
     setCurrentPage(page)
     fetchAllPokemons(itemsPerPage, page)
@@ -198,6 +217,7 @@ export default function App() {
         description={selectedPokemon.description}
         abilities={selectedPokemon.abilities}
         stats={selectedPokemon.stats}
+        handleCloseModal={handleCloseModal}
       />
     </>
   )
