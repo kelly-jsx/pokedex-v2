@@ -5,7 +5,7 @@ type Props = {
 }
 
 export const ImageType = ({ handleChangeImageType }: Props) => (
-  <div className="form-control w-full max-w-xs px-8 lg:px-0">
+  <div className="form-control w-full max-w-xs px-8 lg:px-0 mx-auto lg:mx-0">
     <label className="label">
       <span className="label-text">
         Pick your favourite style of Pokemon images

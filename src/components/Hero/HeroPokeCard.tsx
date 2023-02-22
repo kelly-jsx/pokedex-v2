@@ -49,7 +49,7 @@ export const HeroPokeCard = ({
     return axios
       .get(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`)
       .then((res) => {
-        let description
+        let description: string
 
         for (let i = 0; i < res.data.flavor_text_entries.length; i++) {
           if (res.data.flavor_text_entries[i].language.name === 'en') {
@@ -79,7 +79,7 @@ export const HeroPokeCard = ({
           <img
             src={pokemon.imgUrl}
             alt={pokemon.name}
-            className="my-auto h-full lg:h-auto lg:w-80"
+            className="my-auto mx-auto h-full lg:h-auto lg:w-80"
           />
         </div>
         <div className="mt-0 h-full">

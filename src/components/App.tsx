@@ -18,9 +18,6 @@ export default function App() {
 
   const heroPokemon = 'charmander'
 
-  const [limit, setLimit] = useState(151)
-  const [offset, setOffset] = useState(0)
-
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(9)
   const [totalItems, setTotalItems] = useState(1008)
