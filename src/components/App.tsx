@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import axios from 'axios'
 
 import { Counter } from 'utils/Counter'
 import { Hero } from './Hero/Hero'
 import { SiteActions } from './SiteActions/SiteActions'
-import { PokeCard } from './PokeCard'
 import { InfoModal } from './InfoModal'
 import { Footer } from './Footer'
 import { Pagination } from './Pagination'
 import { setTimeout } from 'timers/promises'
 
 import { timeout } from 'utils'
-import { AllPokemons } from './PokemonList/AllPokemons'
+import { PokemonList } from './PokemonList/PokemonList'
 
 export default function App() {
   const ApiUrl = 'https://pokeapi.co/api/v2/'
@@ -21,6 +20,9 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(9)
   const [totalItems, setTotalItems] = useState(1008)
+
+  const [searchPokemons, setSearchPokemons] = useState([])
+  const [isSearch, setIsSearch] = useState(false)
 
   const [imageType, setImageType] = useState('dreamworld')
 
@@ -42,7 +44,7 @@ export default function App() {
     fetchAllPokemons(itemsPerPage, currentPage)
   }, [])
 
-  const fetchAllPokemons = async (limit, page) => {
+  const fetchAllPokemons = async (limit: number, page: number) => {
     const offset = itemsPerPage * (page - 1)
     const res = await axios
       .get(`${ApiUrl}pokemon?limit=${limit}&offset=${offset}`)
@@ -97,8 +99,8 @@ export default function App() {
     try {
       const res = await axios.get(`${ApiUrl}pokemon-species/${pokemon}`)
       const data = res.data
-      let category
-      let description
+      let category: string
+      let description: string
 
       for (let i = 0; i < data.genera.length; i++) {
         if (data.genera[i].language.name === 'en') {
@@ -154,6 +156,26 @@ export default function App() {
     setImageType(e.target.value)
   }
 
+  const handleSearch = (value) => {
+    value.length > 0 ? setIsSearch(true) : setIsSearch(false)
+
+    let searchArr = []
+
+    for (let i = 0; i < allPokemons.length; i++) {
+      if (
+        allPokemons[i].name.toLowerCase().includes(value.toLowerCase()) ||
+        allPokemons[i].id.toString().includes(value) ||
+        allPokemons[i].id.toString().padStart(3, '0').includes(value)
+      ) {
+        searchArr.push(allPokemons[i])
+      }
+
+      searchArr.length === 0
+        ? setSearchPokemons([])
+        : setSearchPokemons(searchArr)
+    }
+  }
+
   return (
     <>
       <Hero
@@ -162,7 +184,10 @@ export default function App() {
         imageType={imageType}
       />
       <div id="site-more" className="flex flex-col py-4">
-        <SiteActions handleChangeImageType={handleChangeImageType} />
+        <SiteActions
+          handleChangeImageType={handleChangeImageType}
+          handleSearch={handleSearch}
+        />
         <div className="divider" />
         <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
           <div className="place-self-center lg:place-self-start">
@@ -174,11 +199,19 @@ export default function App() {
             />
           </div>
           <div className="mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3">
-            <AllPokemons
-              allPokemons={allPokemons}
-              imageType={imageType}
-              handleClickPokemon={handleClickPokemon}
-            />
+            {isSearch ? (
+              <PokemonList
+                pokemons={searchPokemons}
+                imageType={imageType}
+                handleClickPokemon={handleClickPokemon}
+              />
+            ) : (
+              <PokemonList
+                pokemons={allPokemons}
+                imageType={imageType}
+                handleClickPokemon={handleClickPokemon}
+              />
+            )}
           </div>
           <div className="place-self-center">
             <Pagination
