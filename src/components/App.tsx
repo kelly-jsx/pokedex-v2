@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 import { Counter } from 'utils/Counter'
-import Hero from './Hero/Hero'
+import { Hero } from './Hero/Hero'
 import { SiteActions } from './SiteActions/SiteActions'
 import { PokeCard } from './PokeCard'
 import { InfoModal } from './InfoModal'
@@ -11,6 +11,7 @@ import { Pagination } from './Pagination'
 import { setTimeout } from 'timers/promises'
 
 import { timeout } from 'utils'
+import { AllPokemons } from './PokemonList/AllPokemons'
 
 export default function App() {
   const ApiUrl = 'https://pokeapi.co/api/v2/'
@@ -176,24 +177,11 @@ export default function App() {
             />
           </div>
           <div className="mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3">
-            {Object.keys(allPokemons).map((item) => (
-              <PokeCard
-                key={allPokemons[item].id}
-                index={allPokemons[item].id}
-                name={allPokemons[item].name}
-                image={
-                  imageType === 'dreamworld'
-                    ? allPokemons[item].sprites.other.dream_world.front_default
-                    : imageType === 'home'
-                    ? allPokemons[item].sprites.other.home.front_default
-                    : imageType === 'pixel'
-                    ? allPokemons[item].sprites.front_default
-                    : null
-                }
-                type={allPokemons[item].types}
-                handleClick={() => handleClickPokemon(allPokemons[item].name)}
-              />
-            ))}
+            <AllPokemons
+              allPokemons={allPokemons}
+              imageType={imageType}
+              handleClickPokemon={handleClickPokemon}
+            />
           </div>
           <div className="place-self-center">
             <Pagination

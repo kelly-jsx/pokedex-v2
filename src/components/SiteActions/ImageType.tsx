@@ -1,6 +1,10 @@
 import React from 'react'
 
-export const ImageType = ({ handleChangeImageType }) => (
+type Props = {
+  handleChangeImageType: () => void
+}
+
+export const ImageType = ({ handleChangeImageType }: Props) => (
   <div className="form-control w-full max-w-xs px-8 lg:px-0">
     <label className="label">
       <span className="label-text">

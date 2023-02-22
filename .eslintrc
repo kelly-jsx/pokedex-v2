@@ -26,6 +26,12 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
+  "prettier/prettier": [
+    "error",
+    {
+      "endOfLine": "auto"
+    }
+  ],
   "plugins": ["react", "react-hooks", "@typescript-eslint", "tailwindcss"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",

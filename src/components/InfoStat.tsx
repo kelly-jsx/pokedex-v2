@@ -5,10 +5,7 @@ type Props = {
   statNumber: string
 }
 
-export const InfoStat: React.FunctionComponent<Props> = ({
-  statName,
-  statNumber
-}) => (
+export const InfoStat = ({ statName, statNumber }: Props) => (
   <div className="grid grid-cols-3 items-center gap-3">
     <p className="uppercase">{statName}</p>
     <div className="col-span-2 flex items-center gap-2">

@@ -6,7 +6,20 @@ import { Type } from './Type'
 import { InfoStat } from './InfoStat'
 import { getTypeColor } from 'utils'
 
-// export const InfoModal = ({
+type Props = {
+  index: number
+  name: string
+  imgUrl: string
+  type: []
+  height: number
+  weight: number
+  category: string
+  description: string
+  abilities: []
+  stats: []
+  handleCloseModal: () => void
+}
+
 export const InfoModal = ({
   index,
   name,
@@ -19,7 +32,7 @@ export const InfoModal = ({
   abilities,
   stats,
   handleCloseModal
-}) => {
+}: Props) => {
   let finalColor = []
 
   if (type.length === 2) {

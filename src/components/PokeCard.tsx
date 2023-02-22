@@ -3,7 +3,15 @@ import React from 'react'
 import { Type } from './Type'
 import { getTypeColor } from 'utils'
 
-export const PokeCard = ({ index, name, image, type, handleClick }) => {
+type Props = {
+  index: number
+  name: string
+  image: string
+  type: []
+  handleClick: () => void
+}
+
+export const PokeCard = ({ index, name, image, type, handleClick }: Props) => {
   let finalColor = []
 
   if (type.length === 2) {

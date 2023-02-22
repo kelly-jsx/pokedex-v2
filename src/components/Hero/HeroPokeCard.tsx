@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import { PokeButton } from 'components/PokeButton'
 import { Type } from 'components/Type'
-import { InfoModal } from 'components/InfoModal'
 
 type Props = {
   pokemonName: string
-  handleClick: any
-  imageType: any
+  handleClick: () => void
+  imageType: string
 }
 
-export const HeroPokeCard: React.FunctionComponent<Props> = ({
+export const HeroPokeCard = ({
   pokemonName,
   handleClick,
   imageType
-}) => {
+}: Props) => {
   const [pokemon, setPokemon] = useState({
     name: '',
     index: '',
@@ -100,9 +98,6 @@ export const HeroPokeCard: React.FunctionComponent<Props> = ({
           >
             Show More
           </label>
-          {/* <label htmlFor="info-modal" onClick={handleClick}>
-            <PokeButton BtnW="100%">Show more</PokeButton>
-          </label> */}
         </div>
       </div>
     </>

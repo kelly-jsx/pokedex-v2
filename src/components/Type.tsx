@@ -6,7 +6,7 @@ type Props = {
   pokeType: string
 }
 
-export const Type: React.FunctionComponent<Props> = ({ pokeType }) => {
+export const Type = ({ pokeType }: Props) => {
   return (
     <div
       className="flex w-max gap-1 rounded-lg p-1 shadow-lg"

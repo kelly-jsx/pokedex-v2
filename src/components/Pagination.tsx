@@ -1,18 +1,16 @@
-import { FC } from 'react'
-
-type PaginationProps = {
+type Props = {
   currentPage: number
   total: number
   onPageSelect: (page: number) => void
   itemsPerPage: number
 }
 
-export const Pagination: FC<PaginationProps> = ({
+export const Pagination = ({
   currentPage,
   total,
   onPageSelect,
   itemsPerPage
-}) => {
+}: Props) => {
   let middleButtonPages = [currentPage - 1, currentPage, currentPage + 1]
 
   if (middleButtonPages[0] === 0)
