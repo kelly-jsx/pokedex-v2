@@ -8,20 +8,24 @@ export const SearchInput = ({ handleSearch }: Props) => {
   const [searchValue, setSearchValue] = useState('')
 
   return (
-    <div className="form-control mx-auto mt-2 lg:mx-0">
+    <form
+      className="form-control mx-auto mt-2 lg:mx-0 lg:mt-0 w-full lg:w-auto"
+      onSubmit={() => {
+        handleSearch(searchValue)
+        setSearchValue('')
+      }}
+    >
       <div className="input-group">
         <input
           type="text"
           placeholder="Search…"
-          className="input-bordered input"
+          className="input-bordered input w-full lg:w-auto"
+          value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleSearch(searchValue)
-          }}
         />
         <button
           className="btn-primary btn-square btn hover:btn-secondary"
-          onClick={() => handleSearch(searchValue)}
+          type="submit"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,6 +43,6 @@ export const SearchInput = ({ handleSearch }: Props) => {
           </svg>
         </button>
       </div>
-    </div>
+    </form>
   )
 }

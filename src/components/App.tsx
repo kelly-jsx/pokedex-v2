@@ -23,6 +23,8 @@ export default function App() {
 
   const [searchPokemons, setSearchPokemons] = useState([])
   const [isSearch, setIsSearch] = useState(false)
+  const [filterPokemons, setFilterPokemons] = useState([])
+  const [isFilter, setIsFilter] = useState(false)
 
   const [imageType, setImageType] = useState('dreamworld')
 
@@ -156,7 +158,7 @@ export default function App() {
     setImageType(e.target.value)
   }
 
-  const handleSearch = (value) => {
+  const handleSearch = (value: string) => {
     value.length > 0 ? setIsSearch(true) : setIsSearch(false)
 
     let searchArr = []
@@ -176,6 +178,13 @@ export default function App() {
     }
   }
 
+  const handleResetFilterAndSearch = () => {
+    setIsFilter(false)
+    setFilterPokemons([])
+    setIsSearch(false)
+    setSearchPokemons([])
+  }
+
   return (
     <>
       <Hero
@@ -187,6 +196,7 @@ export default function App() {
         <SiteActions
           handleChangeImageType={handleChangeImageType}
           handleSearch={handleSearch}
+          handleReset={handleResetFilterAndSearch}
         />
         <div className="divider" />
         <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
