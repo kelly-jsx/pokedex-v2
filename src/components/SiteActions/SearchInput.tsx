@@ -8,13 +8,7 @@ export const SearchInput = ({ handleSearch }: Props) => {
   const [searchValue, setSearchValue] = useState('')
 
   return (
-    <form
-      className="form-control mx-auto mt-2 lg:mx-0 lg:mt-0 w-full lg:w-auto"
-      onSubmit={() => {
-        handleSearch(searchValue)
-        setSearchValue('')
-      }}
-    >
+    <div className="form-control mx-auto mt-2 lg:mx-0 lg:mt-0 w-full lg:w-auto">
       <div className="input-group">
         <input
           type="text"
@@ -22,10 +16,19 @@ export const SearchInput = ({ handleSearch }: Props) => {
           className="input-bordered input w-full lg:w-auto"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch(searchValue)
+              setSearchValue('')
+            }
+          }}
         />
         <button
           className="btn-primary btn-square btn hover:btn-secondary"
-          type="submit"
+          onClick={() => {
+            handleSearch(searchValue)
+            setSearchValue('')
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -43,6 +46,6 @@ export const SearchInput = ({ handleSearch }: Props) => {
           </svg>
         </button>
       </div>
-    </form>
+    </div>
   )
 }

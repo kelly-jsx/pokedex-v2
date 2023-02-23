@@ -25,6 +25,7 @@ export default function App() {
   const [isSearch, setIsSearch] = useState(false)
   const [filterPokemons, setFilterPokemons] = useState([])
   const [isFilter, setIsFilter] = useState(false)
+  const [filterType, setFilterType] = useState('')
 
   const [imageType, setImageType] = useState('dreamworld')
 
@@ -159,6 +160,7 @@ export default function App() {
   }
 
   const handleSearch = (value: string) => {
+    setIsFilter(false)
     value.length > 0 ? setIsSearch(true) : setIsSearch(false)
 
     let searchArr = []
@@ -175,6 +177,33 @@ export default function App() {
       searchArr.length === 0
         ? setSearchPokemons([])
         : setSearchPokemons(searchArr)
+    }
+  }
+
+  const handleFilter = (value: string) => {
+    setFilterType(value)
+    setIsSearch(false)
+    value.length > 0 ? setIsFilter(true) : setIsFilter(false)
+
+    let filterArr = []
+
+    for (let i = 0; i < allPokemons.length; i++) {
+      for (let j = 0; j < allPokemons[i].types.length; j++) {
+        if (
+          allPokemons[i].types[j].type.name
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        ) {
+          filterArr.push(allPokemons[i])
+        }
+      }
+      // if (allPokemons[i].types[i].type.name.includes(value)) {
+      //   filterArr.push(allPokemons[i])
+      // }
+
+      filterArr.length === 0
+        ? setFilterPokemons([])
+        : setFilterPokemons(filterArr)
     }
   }
 
@@ -195,6 +224,7 @@ export default function App() {
       <div id="site-more" className="flex flex-col py-4">
         <SiteActions
           handleChangeImageType={handleChangeImageType}
+          handleFilter={handleFilter}
           handleSearch={handleSearch}
           handleReset={handleResetFilterAndSearch}
         />
@@ -209,7 +239,13 @@ export default function App() {
             />
           </div>
           <div className="mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3">
-            {isSearch ? (
+            {isFilter ? (
+              <PokemonList
+                pokemons={filterPokemons}
+                imageType={imageType}
+                handleClickPokemon={handleClickPokemon}
+              />
+            ) : isSearch ? (
               <PokemonList
                 pokemons={searchPokemons}
                 imageType={imageType}
