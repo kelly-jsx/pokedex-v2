@@ -75,7 +75,9 @@ export default function App() {
       let sprites
 
       if (imageType === 'dreamworld') {
-        sprites = data.sprites.other.dream_world.front_default
+        data.sprites.other.dream_world.front_default
+          ? (sprites = data.sprites.other.dream_world.front_default)
+          : (sprites = data.sprites.other['official-artwork'].front_default)
       } else if (imageType === 'home') {
         sprites = data.sprites.other.home.front_default
       } else if (imageType === 'pixel') {

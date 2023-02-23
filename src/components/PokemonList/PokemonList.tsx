@@ -19,6 +19,8 @@ export const PokemonList = ({
       image={
         imageType === 'dreamworld'
           ? pokemons[item].sprites.other.dream_world.front_default
+            ? pokemons[item].sprites.other.dream_world.front_default
+            : pokemons[item].sprites.other['official-artwork'].front_default
           : imageType === 'home'
           ? pokemons[item].sprites.other.home.front_default
           : imageType === 'pixel'
