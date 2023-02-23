@@ -25,7 +25,6 @@ export default function App() {
   const [isSearch, setIsSearch] = useState(false)
   const [filterPokemons, setFilterPokemons] = useState([])
   const [isFilter, setIsFilter] = useState(false)
-  const [filterType, setFilterType] = useState('')
 
   const [imageType, setImageType] = useState('dreamworld')
 
@@ -51,6 +50,13 @@ export default function App() {
     const offset = itemsPerPage * (page - 1)
     const res = await axios
       .get(`${ApiUrl}pokemon?limit=${limit}&offset=${offset}`)
+      .catch((err) => console.log(err))
+    fetchPokemonData(res.data.results)
+  }
+
+  const fetchFilterPokemons = async () => {
+    const res = await axios
+      .get(`${ApiUrl}pokemon?limit=${151}&offset=${0}`)
       .catch((err) => console.log(err))
     fetchPokemonData(res.data.results)
   }
@@ -159,7 +165,8 @@ export default function App() {
     setImageType(e.target.value)
   }
 
-  const handleSearch = (value: string) => {
+  const handleSearch = async (value: string) => {
+    await fetchFilterPokemons()
     setIsFilter(false)
     value.length > 0 ? setIsSearch(true) : setIsSearch(false)
 
@@ -181,7 +188,7 @@ export default function App() {
   }
 
   const handleFilter = (value: string) => {
-    setFilterType(value)
+    fetchFilterPokemons()
     setIsSearch(false)
     value.length > 0 ? setIsFilter(true) : setIsFilter(false)
 
@@ -197,9 +204,6 @@ export default function App() {
           filterArr.push(allPokemons[i])
         }
       }
-      // if (allPokemons[i].types[i].type.name.includes(value)) {
-      //   filterArr.push(allPokemons[i])
-      // }
 
       filterArr.length === 0
         ? setFilterPokemons([])
@@ -212,6 +216,7 @@ export default function App() {
     setFilterPokemons([])
     setIsSearch(false)
     setSearchPokemons([])
+    fetchAllPokemons(itemsPerPage, currentPage)
   }
 
   return (
@@ -231,12 +236,14 @@ export default function App() {
         <div className="divider" />
         <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
           <div className="place-self-center lg:place-self-start">
-            <Pagination
-              currentPage={currentPage}
-              onPageSelect={handleChangePage}
-              total={totalItems}
-              itemsPerPage={itemsPerPage}
-            />
+            {!isSearch && !isFilter && (
+              <Pagination
+                currentPage={currentPage}
+                onPageSelect={handleChangePage}
+                total={totalItems}
+                itemsPerPage={itemsPerPage}
+              />
+            )}
           </div>
           <div className="mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3">
             {isFilter ? (
@@ -260,12 +267,14 @@ export default function App() {
             )}
           </div>
           <div className="place-self-center">
-            <Pagination
-              currentPage={currentPage}
-              onPageSelect={handleChangePage}
-              total={totalItems}
-              itemsPerPage={itemsPerPage}
-            />
+            {!isSearch && !isFilter && (
+              <Pagination
+                currentPage={currentPage}
+                onPageSelect={handleChangePage}
+                total={totalItems}
+                itemsPerPage={itemsPerPage}
+              />
+            )}
           </div>
         </div>
       </div>
