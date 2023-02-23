@@ -17,16 +17,16 @@ export default function App() {
 
   const heroPokemon = 'charmander'
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(9)
-  const [totalItems, setTotalItems] = useState(1008)
-
   const [searchPokemons, setSearchPokemons] = useState([])
   const [isSearch, setIsSearch] = useState(false)
   const [filterPokemons, setFilterPokemons] = useState([])
   const [isFilter, setIsFilter] = useState(false)
 
   const [imageType, setImageType] = useState('dreamworld')
+
+  const [region, setRegion] = useState('kanto')
+  const [limit, setLimit] = useState(151)
+  const [offset, setOffset] = useState(0)
 
   const [allPokemons, setAllPokemons] = useState([])
   const [selectedPokemon, setSelectedPokemon] = useState({
@@ -43,29 +43,21 @@ export default function App() {
   })
 
   useEffect(() => {
-    fetchAllPokemons(itemsPerPage, currentPage)
-  }, [])
+    fetchAllPokemons(limit, offset)
+  }, [limit, offset])
 
-  const fetchAllPokemons = async (limit: number, page: number) => {
-    const offset = itemsPerPage * (page - 1)
+  const fetchAllPokemons = async (limit: number, offset: number) => {
     const res = await axios
       .get(`${ApiUrl}pokemon?limit=${limit}&offset=${offset}`)
       .catch((err) => console.log(err))
     fetchPokemonData(res.data.results)
   }
 
-  const fetchFilterPokemons = async () => {
-    const res = await axios
-      .get(`${ApiUrl}pokemon?limit=${151}&offset=${0}`)
-      .catch((err) => console.log(err))
-    fetchPokemonData(res.data.results)
-  }
-
-  const fetchPokemonData = async (res) => {
-    const pokemonArr = []
+  const fetchPokemonData = async (res: any[]) => {
+    const pokemonArr: any[] | ((prevState: never[]) => never[]) = []
 
     await Promise.all(
-      res.map((pokemon) => {
+      res.map((pokemon: { name: any }) => {
         return axios.get(`${ApiUrl}pokemon/${pokemon.name}`).then((res) => {
           pokemonArr.push(res.data)
         })
@@ -77,7 +69,7 @@ export default function App() {
     setAllPokemons(pokemonArr)
   }
 
-  const fetchPokemonDetails = async (pokemon) => {
+  const fetchPokemonDetails = async (pokemon: any) => {
     return axios.get(`${ApiUrl}pokemon/${pokemon}`).then((res) => {
       const data = res.data
 
@@ -104,7 +96,7 @@ export default function App() {
     })
   }
 
-  const fetchPokemonSpecies = async (pokemon) => {
+  const fetchPokemonSpecies = async (pokemon: any) => {
     try {
       const res = await axios.get(`${ApiUrl}pokemon-species/${pokemon}`)
       const data = res.data
@@ -135,7 +127,7 @@ export default function App() {
     }
   }
 
-  const handleClickPokemon = (pokemon) => {
+  const handleClickPokemon = (pokemon: string) => {
     fetchPokemonDetails(pokemon)
     fetchPokemonSpecies(pokemon)
   }
@@ -156,21 +148,17 @@ export default function App() {
     })
   }
 
-  const handleChangePage = (page) => {
-    setCurrentPage(page)
-    fetchAllPokemons(itemsPerPage, page)
-  }
-
-  const handleChangeImageType = (e) => {
+  const handleChangeImageType = (e: {
+    target: { value: SetStateAction<string> }
+  }) => {
     setImageType(e.target.value)
   }
 
-  const handleSearch = async (value: string) => {
-    await fetchFilterPokemons()
+  const handleSearch = (value: string) => {
     setIsFilter(false)
     value.length > 0 ? setIsSearch(true) : setIsSearch(false)
 
-    let searchArr = []
+    let searchArr: SetStateAction<never[]> = []
 
     for (let i = 0; i < allPokemons.length; i++) {
       if (
@@ -188,11 +176,10 @@ export default function App() {
   }
 
   const handleFilter = (value: string) => {
-    fetchFilterPokemons()
     setIsSearch(false)
     value.length > 0 ? setIsFilter(true) : setIsFilter(false)
 
-    let filterArr = []
+    let filterArr: SetStateAction<never[]> = []
 
     for (let i = 0; i < allPokemons.length; i++) {
       for (let j = 0; j < allPokemons[i].types.length; j++) {
@@ -211,12 +198,40 @@ export default function App() {
     }
   }
 
+  const handleChangeRegion = (e) => {
+    if (e.target.value === 'kanto') {
+      setLimit(151)
+      setOffset(0)
+    } else if (e.target.value === 'johto') {
+      setLimit(100)
+      setOffset(151)
+    } else if (e.target.value === 'hoenn') {
+      setLimit(135)
+      setOffset(251)
+    } else if (e.target.value === 'sinnoh') {
+      setLimit(108)
+      setOffset(386)
+    } else if (e.target.value === 'unova') {
+      setLimit(155)
+      setOffset(494)
+    } else if (e.target.value === 'kalos') {
+      setLimit(72)
+      setOffset(649)
+    } else if (e.target.value === 'alola') {
+      setLimit(88)
+      setOffset(721)
+    } else if (e.target.value === 'galar') {
+      setLimit(89)
+      setOffset(809)
+    }
+  }
+
   const handleResetFilterAndSearch = () => {
     setIsFilter(false)
     setFilterPokemons([])
     setIsSearch(false)
     setSearchPokemons([])
-    fetchAllPokemons(itemsPerPage, currentPage)
+    fetchAllPokemons(151, 0)
   }
 
   return (
@@ -229,22 +244,14 @@ export default function App() {
       <div id="site-more" className="flex flex-col py-4">
         <SiteActions
           handleChangeImageType={handleChangeImageType}
+          handleChangeRegion={handleChangeRegion}
           handleFilter={handleFilter}
           handleSearch={handleSearch}
           handleReset={handleResetFilterAndSearch}
         />
         <div className="divider" />
         <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
-          <div className="place-self-center lg:place-self-start">
-            {!isSearch && !isFilter && (
-              <Pagination
-                currentPage={currentPage}
-                onPageSelect={handleChangePage}
-                total={totalItems}
-                itemsPerPage={itemsPerPage}
-              />
-            )}
-          </div>
+          <div className="place-self-center lg:place-self-start"></div>
           <div className="mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3">
             {isFilter ? (
               <PokemonList
@@ -263,16 +270,6 @@ export default function App() {
                 pokemons={allPokemons}
                 imageType={imageType}
                 handleClickPokemon={handleClickPokemon}
-              />
-            )}
-          </div>
-          <div className="place-self-center">
-            {!isSearch && !isFilter && (
-              <Pagination
-                currentPage={currentPage}
-                onPageSelect={handleChangePage}
-                total={totalItems}
-                itemsPerPage={itemsPerPage}
               />
             )}
           </div>

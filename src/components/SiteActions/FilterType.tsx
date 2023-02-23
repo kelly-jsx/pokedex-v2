@@ -7,7 +7,7 @@ type Props = {
   handleFilter: (e) => void
 }
 
-export const FilterType = ({ handleFilter }) => (
+export const FilterType = ({ handleFilter }: Props) => (
   <div className="flex snap-x snap-mandatory gap-2 overflow-y-scroll p-2 px-12 lg:w-1/2">
     {colorTypes.map(({ name }) => (
       <div
