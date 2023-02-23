@@ -26,7 +26,7 @@ export const SiteActions = ({
         <FilterType handleFilter={handleFilter} />
         <SearchInput handleSearch={handleSearch} />
       </div>
-      <div className="flex flex-col lg:flex-row lg:justify-between items-center">
+      <div className="flex flex-col lg:flex-row lg:justify-between items-end">
         <ImageType handleChangeImageType={handleChangeImageType} />
         <FilterRegion handleChangeRegion={handleChangeRegion} />
         <button

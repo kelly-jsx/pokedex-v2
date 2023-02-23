@@ -6,7 +6,7 @@ import { Hero } from './Hero/Hero'
 import { SiteActions } from './SiteActions/SiteActions'
 import { InfoModal } from './InfoModal'
 import { Footer } from './Footer'
-import { Pagination } from './Pagination'
+
 import { setTimeout } from 'timers/promises'
 
 import { timeout } from 'utils'
@@ -24,7 +24,6 @@ export default function App() {
 
   const [imageType, setImageType] = useState('dreamworld')
 
-  const [region, setRegion] = useState('kanto')
   const [limit, setLimit] = useState(151)
   const [offset, setOffset] = useState(0)
 
@@ -250,29 +249,27 @@ export default function App() {
           handleReset={handleResetFilterAndSearch}
         />
         <div className="divider" />
-        <div className="p-2 lg:px-12 xl:px-52 2xl:px-96">
-          <div className="place-self-center lg:place-self-start"></div>
-          <div className="mt-8 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3">
-            {isFilter ? (
-              <PokemonList
-                pokemons={filterPokemons}
-                imageType={imageType}
-                handleClickPokemon={handleClickPokemon}
-              />
-            ) : isSearch ? (
-              <PokemonList
-                pokemons={searchPokemons}
-                imageType={imageType}
-                handleClickPokemon={handleClickPokemon}
-              />
-            ) : (
-              <PokemonList
-                pokemons={allPokemons}
-                imageType={imageType}
-                handleClickPokemon={handleClickPokemon}
-              />
-            )}
-          </div>
+        {/* <div className="place-self-center lg:place-self-start"></div> */}
+        <div className="mt-2 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 w-full px-4">
+          {isFilter ? (
+            <PokemonList
+              pokemons={filterPokemons}
+              imageType={imageType}
+              handleClickPokemon={handleClickPokemon}
+            />
+          ) : isSearch ? (
+            <PokemonList
+              pokemons={searchPokemons}
+              imageType={imageType}
+              handleClickPokemon={handleClickPokemon}
+            />
+          ) : (
+            <PokemonList
+              pokemons={allPokemons}
+              imageType={imageType}
+              handleClickPokemon={handleClickPokemon}
+            />
+          )}
         </div>
       </div>
       <Footer />
