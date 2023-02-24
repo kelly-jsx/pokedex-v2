@@ -38,7 +38,8 @@ export default function App() {
     category: '',
     description: '',
     abilities: [],
-    stats: []
+    stats: [],
+    gender: 0
   })
 
   useEffect(() => {
@@ -121,7 +122,8 @@ export default function App() {
       setSelectedPokemon((prevPokemon) => ({
         ...prevPokemon,
         description: description,
-        category: category
+        category: category,
+        gender: data.gender_rate
       }))
     } catch (error) {
       console.log(error)
@@ -283,6 +285,7 @@ export default function App() {
         type={selectedPokemon.types}
         height={selectedPokemon.height}
         weight={selectedPokemon.weight}
+        gender={selectedPokemon.gender}
         category={selectedPokemon.category}
         description={selectedPokemon.description}
         abilities={selectedPokemon.abilities}

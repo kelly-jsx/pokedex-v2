@@ -21,6 +21,7 @@ type Props = {
   handleCloseModal: () => void
   handleClickEvo: () => void
   imageType: string
+  gender: number
 }
 
 export const InfoModal = ({
@@ -37,7 +38,8 @@ export const InfoModal = ({
   stats,
   handleCloseModal,
   handleClickEvo,
-  imageType
+  imageType,
+  gender
 }: Props) => {
   let finalColor = []
 
@@ -115,10 +117,11 @@ export const InfoModal = ({
                     </div>
                     <div className="flex items-center justify-center gap-2">
                       <div className="flex items-center gap-1">
-                        <GiMale /> <p>87.5%</p>
+                        {/* <GiMale /> <p>87.5%</p> */}
+                        <GiMale /> <p>{((8 - gender) / 8) * 100}%</p>
                       </div>
                       <div className="flex items-center">
-                        <GiFemale /> <p>12.5%</p>
+                        <GiFemale /> <p>{(gender / 8) * 100}%</p>
                       </div>
                     </div>
                   </div>
