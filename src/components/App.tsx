@@ -289,6 +289,7 @@ export default function App() {
         stats={selectedPokemon.stats}
         handleCloseModal={handleCloseModal}
         handleClickEvo={handleClickPokemon}
+        imageType={imageType}
       />
     </>
   )

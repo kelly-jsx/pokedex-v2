@@ -19,6 +19,8 @@ type Props = {
   abilities: []
   stats: []
   handleCloseModal: () => void
+  handleClickEvo: () => void
+  imageType: string
 }
 
 export const InfoModal = ({
@@ -34,7 +36,8 @@ export const InfoModal = ({
   abilities,
   stats,
   handleCloseModal,
-  handleClickEvo
+  handleClickEvo,
+  imageType
 }: Props) => {
   let finalColor = []
 
@@ -154,6 +157,7 @@ export const InfoModal = ({
                     pokemon={pokemon}
                     name={name}
                     handleClickEvo={handleClickEvo}
+                    imageType={imageType}
                   />
                   {/* </div> */}
                 </div>

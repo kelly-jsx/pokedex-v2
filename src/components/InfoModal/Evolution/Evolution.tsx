@@ -9,7 +9,19 @@ import {
 
 import { EvolutionImg } from './EvolutionImage'
 
-export const Evolution = ({ pokemon, name, handleClickEvo }) => {
+type Props = {
+  pokemon: object
+  name: string
+  handleClickEvo: () => void
+  imageType: string
+}
+
+export const Evolution = ({
+  pokemon,
+  name,
+  handleClickEvo,
+  imageType
+}: Props) => {
   const [pokemonsFamily, setPokemonsFamily] = useState([])
   const [evolvesPokemon, setEvolvesPokemon] = useState([])
 
@@ -58,10 +70,22 @@ export const Evolution = ({ pokemon, name, handleClickEvo }) => {
       Promise.all([...urlsAxios]).then((responses) => {
         const result = responses.map((response, index) => {
           const data = response.data
+
+          let sprites
+          if (imageType === 'dreamworld') {
+            data.sprites.other.dream_world.front_default
+              ? (sprites = data.sprites.other.dream_world.front_default)
+              : (sprites = data.sprites.other['official-artwork'].front_default)
+          } else if (imageType === 'home') {
+            sprites = data.sprites.other.home.front_default
+          } else if (imageType === 'pixel') {
+            sprites = data.sprites.front_default
+          }
+
           return {
             ...pokemonsFamily[index],
             index: `#${data.id}`,
-            image: data.sprites.other.dream_world.front_default,
+            image: sprites,
             type: data.types
           }
         })
@@ -71,7 +95,7 @@ export const Evolution = ({ pokemon, name, handleClickEvo }) => {
   }, [pokemonsFamily])
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4">
+    <div className="flex flex-col lg:flex-row">
       {evolvesPokemon.length
         ? evolvesPokemon.slice(0, 9).map((evolves, index) => (
             <div className="flex flex-col lg:flex-row" key={evolves.index}>
@@ -85,6 +109,7 @@ export const Evolution = ({ pokemon, name, handleClickEvo }) => {
                 <EvolutionImg
                   evolves={evolves}
                   handleClickEvo={handleClickEvo}
+                  // handleClickEvo={() => console.log(pokemon)}
                 />
                 <h4 className="capitalize">{evolves.name}</h4>
               </div>
