@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Counter } from 'utils/Counter'
 import { Hero } from './Hero/Hero'
 import { SiteActions } from './SiteActions/SiteActions'
-import { InfoModal } from './InfoModal'
+import { InfoModal } from './InfoModal/InfoModal'
 import { Footer } from './Footer'
 
 import { setTimeout } from 'timers/promises'
@@ -276,6 +276,7 @@ export default function App() {
       </div>
       <Footer />
       <InfoModal
+        pokemon={selectedPokemon}
         index={selectedPokemon.index}
         name={selectedPokemon.name}
         imgUrl={selectedPokemon.imgUrl}
@@ -287,6 +288,7 @@ export default function App() {
         abilities={selectedPokemon.abilities}
         stats={selectedPokemon.stats}
         handleCloseModal={handleCloseModal}
+        handleClickEvo={handleClickPokemon}
       />
     </>
   )

@@ -29,7 +29,7 @@ export const PokeCard = ({ index, name, image, type, handleClick }: Props) => {
   return (
     <label htmlFor="info-modal" onClick={handleClick}>
       <div
-        className="hover:scale-103 cursor-pointer rounded-lg bg-base-300 text-center text-black shadow-lg transition ease-in-out hover:-translate-y-1.5"
+        className="hover:scale-105 cursor-pointer rounded-lg bg-base-300 text-center text-black shadow-lg transition ease-in-out hover:-translate-y-1.5"
         style={{
           background: `linear-gradient(${finalColor[0]}, ${finalColor[1]})`
         }}

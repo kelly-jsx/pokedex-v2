@@ -2,9 +2,10 @@ import React from 'react'
 
 import { GiBodyHeight, GiWeight, GiMale, GiFemale } from 'react-icons/gi'
 
-import { Type } from './Type'
-import { InfoStat } from './InfoStat'
+import { Type } from '../Type'
+import { InfoStat } from '../InfoStat'
 import { getTypeColor } from 'utils'
+import Evolution from './Evolution/Evolution'
 
 type Props = {
   index: number
@@ -21,6 +22,7 @@ type Props = {
 }
 
 export const InfoModal = ({
+  pokemon,
   index,
   name,
   imgUrl,
@@ -31,7 +33,8 @@ export const InfoModal = ({
   description,
   abilities,
   stats,
-  handleCloseModal
+  handleCloseModal,
+  handleClickEvo
 }: Props) => {
   let finalColor = []
 
@@ -146,11 +149,13 @@ export const InfoModal = ({
                 </div>
                 <div>
                   <p>Evolution</p>
-                  <div className="flex justify-center gap-4">
-                    <div>Evolution 1</div>
-                    <div>Evolution 2</div>
-                    <div>Evolution 3</div>
-                  </div>
+                  {/* <div className="flex justify-center"> */}
+                  <Evolution
+                    pokemon={pokemon}
+                    name={name}
+                    handleClickEvo={handleClickEvo}
+                  />
+                  {/* </div> */}
                 </div>
               </div>
             </div>
