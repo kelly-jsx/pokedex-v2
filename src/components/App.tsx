@@ -24,10 +24,13 @@ export default function App() {
 
   const [imageType, setImageType] = useState('dreamworld')
 
-  const [limit, setLimit] = useState(151)
+  const [region, setRegion] = useState('kanto')
+  const [maxLimit, setMaxLimit] = useState(151)
+  const [limit, setLimit] = useState(10)
   const [offset, setOffset] = useState(0)
 
   const [allPokemons, setAllPokemons] = useState([])
+  const [allRegionPokemons, setAllRegionPokemons] = useState([])
   const [selectedPokemon, setSelectedPokemon] = useState({
     index: '',
     name: '',
@@ -44,6 +47,7 @@ export default function App() {
 
   useEffect(() => {
     fetchAllPokemons(limit, offset)
+    fetchAllRegionPokemons(maxLimit, offset)
   }, [limit, offset])
 
   const fetchAllPokemons = async (limit: number, offset: number) => {
@@ -67,6 +71,29 @@ export default function App() {
     pokemonArr.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0))
 
     setAllPokemons(pokemonArr)
+  }
+
+  const fetchAllRegionPokemons = async (limit: number, offset: number) => {
+    const res = await axios
+      .get(`${ApiUrl}pokemon?limit=${limit}&offset=${offset}`)
+      .catch((err) => console.log(err))
+    fetchRegionPokemonData(res.data.results)
+  }
+
+  const fetchRegionPokemonData = async (res: any[]) => {
+    const pokemonArr: any[] | ((prevState: never[]) => never[]) = []
+
+    await Promise.all(
+      res.map((pokemon: { name: any }) => {
+        return axios.get(`${ApiUrl}pokemon/${pokemon.name}`).then((res) => {
+          pokemonArr.push(res.data)
+        })
+      })
+    )
+
+    pokemonArr.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0))
+
+    setAllRegionPokemons(pokemonArr)
   }
 
   const fetchPokemonDetails = async (pokemon: any) => {
@@ -163,13 +190,13 @@ export default function App() {
 
     let searchArr: SetStateAction<never[]> = []
 
-    for (let i = 0; i < allPokemons.length; i++) {
+    for (let i = 0; i < allRegionPokemons.length; i++) {
       if (
-        allPokemons[i].name.toLowerCase().includes(value.toLowerCase()) ||
-        allPokemons[i].id.toString().includes(value) ||
-        allPokemons[i].id.toString().padStart(3, '0').includes(value)
+        allRegionPokemons[i].name.toLowerCase().includes(value.toLowerCase()) ||
+        allRegionPokemons[i].id.toString().includes(value) ||
+        allRegionPokemons[i].id.toString().padStart(3, '0').includes(value)
       ) {
-        searchArr.push(allPokemons[i])
+        searchArr.push(allRegionPokemons[i])
       }
 
       searchArr.length === 0
@@ -184,14 +211,14 @@ export default function App() {
 
     let filterArr: SetStateAction<never[]> = []
 
-    for (let i = 0; i < allPokemons.length; i++) {
-      for (let j = 0; j < allPokemons[i].types.length; j++) {
+    for (let i = 0; i < allRegionPokemons.length; i++) {
+      for (let j = 0; j < allRegionPokemons[i].types.length; j++) {
         if (
-          allPokemons[i].types[j].type.name
+          allRegionPokemons[i].types[j].type.name
             .toLowerCase()
             .includes(value.toLowerCase())
         ) {
-          filterArr.push(allPokemons[i])
+          filterArr.push(allRegionPokemons[i])
         }
       }
 
@@ -203,30 +230,40 @@ export default function App() {
 
   const handleChangeRegion = (e) => {
     if (e.target.value === 'kanto') {
-      setLimit(151)
+      setMaxLimit(151)
       setOffset(0)
+      setRegion('kanto')
     } else if (e.target.value === 'johto') {
-      setLimit(100)
+      setMaxLimit(100)
       setOffset(151)
+      setRegion('johto')
     } else if (e.target.value === 'hoenn') {
-      setLimit(135)
+      setMaxLimit(135)
       setOffset(251)
+      setRegion('hoenn')
     } else if (e.target.value === 'sinnoh') {
-      setLimit(108)
+      setMaxLimit(108)
       setOffset(386)
+      setRegion('sinnoh')
     } else if (e.target.value === 'unova') {
-      setLimit(155)
+      setMaxLimit(155)
       setOffset(494)
+      setRegion('unova')
     } else if (e.target.value === 'kalos') {
-      setLimit(72)
+      setMaxLimit(72)
       setOffset(649)
+      setRegion('kalos')
     } else if (e.target.value === 'alola') {
-      setLimit(88)
+      setMaxLimit(88)
       setOffset(721)
+      setRegion('alola')
     } else if (e.target.value === 'galar') {
-      setLimit(89)
+      setMaxLimit(89)
       setOffset(809)
+      setRegion('galar')
     }
+
+    setLimit(10)
   }
 
   const handleResetFilterAndSearch = () => {
@@ -234,7 +271,15 @@ export default function App() {
     setFilterPokemons([])
     setIsSearch(false)
     setSearchPokemons([])
-    fetchAllPokemons(151, 0)
+    setLimit(10)
+  }
+
+  const handleShowMore = () => {
+    if (limit + 10 > maxLimit) {
+      setLimit(maxLimit)
+    } else {
+      setLimit(limit + 10)
+    }
   }
 
   return (
@@ -275,6 +320,14 @@ export default function App() {
             />
           )}
         </div>
+        {limit !== maxLimit && (
+          <button
+            className="btn btn-primary mx-auto hover:btn-secondary"
+            onClick={handleShowMore}
+          >
+            Show more Pokemons
+          </button>
+        )}
       </div>
       <Footer />
       <InfoModal
