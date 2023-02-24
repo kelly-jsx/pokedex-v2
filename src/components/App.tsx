@@ -11,6 +11,7 @@ import { setTimeout } from 'timers/promises'
 
 import { timeout } from 'utils'
 import { PokemonList } from './PokemonList/PokemonList'
+import { Loading } from './Loading/Loading'
 
 export default function App() {
   const ApiUrl = 'https://pokeapi.co/api/v2/'
@@ -320,6 +321,7 @@ export default function App() {
             />
           )}
         </div>
+        <Loading />
         {limit !== maxLimit && (
           <button
             className="btn btn-primary mx-auto hover:btn-secondary"
