@@ -92,7 +92,7 @@ export const Evolution = ({
         setEvolvesPokemon(result)
       })
     }
-  }, [pokemonsFamily])
+  }, [pokemonsFamily, imageType])
 
   return (
     <div className="flex flex-col lg:flex-row">
