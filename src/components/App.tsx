@@ -7,11 +7,10 @@ import { SiteActions } from './SiteActions/SiteActions'
 import { InfoModal } from './InfoModal/InfoModal'
 import { Footer } from './Footer'
 
-import { setTimeout } from 'timers/promises'
-
 import { timeout } from 'utils'
 import { PokemonList } from './PokemonList/PokemonList'
 import { Loading } from './Loading/Loading'
+import { LoadingSite } from './Loading/LoadingSite'
 
 export default function App() {
   const ApiUrl = 'https://pokeapi.co/api/v2/'
@@ -29,6 +28,9 @@ export default function App() {
   const [maxLimit, setMaxLimit] = useState(151)
   const [limit, setLimit] = useState(10)
   const [offset, setOffset] = useState(0)
+
+  const [loadingSite, setLoadingSite] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   const [allPokemons, setAllPokemons] = useState([])
   const [allRegionPokemons, setAllRegionPokemons] = useState([])
@@ -49,6 +51,10 @@ export default function App() {
   useEffect(() => {
     fetchAllPokemons(limit, offset)
     fetchAllRegionPokemons(maxLimit, offset)
+    const timer = setTimeout(() => {
+      setLoadingSite(false)
+    }, 500)
+    return () => clearTimeout(timer)
   }, [limit, offset])
 
   const fetchAllPokemons = async (limit: number, offset: number) => {
@@ -285,53 +291,63 @@ export default function App() {
 
   return (
     <>
-      <Hero
-        pokemon={heroPokemon}
-        handleClick={() => handleClickPokemon(heroPokemon)}
-        imageType={imageType}
-      />
-      <div id="site-more" className="flex flex-col py-4">
-        <SiteActions
-          handleChangeImageType={handleChangeImageType}
-          handleChangeRegion={handleChangeRegion}
-          handleFilter={handleFilter}
-          handleSearch={handleSearch}
-          handleReset={handleResetFilterAndSearch}
-        />
-        <div className="divider" />
-        {/* <div className="place-self-center lg:place-self-start"></div> */}
-        <div className="mt-2 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 w-full px-4">
-          {isFilter ? (
-            <PokemonList
-              pokemons={filterPokemons}
-              imageType={imageType}
-              handleClickPokemon={handleClickPokemon}
+      {loadingSite ? (
+        <LoadingSite />
+      ) : (
+        <>
+          <Hero
+            pokemon={heroPokemon}
+            handleClick={() => handleClickPokemon(heroPokemon)}
+            imageType={imageType}
+          />
+          <div id="site-more" className="flex flex-col py-4">
+            <SiteActions
+              handleChangeImageType={handleChangeImageType}
+              handleChangeRegion={handleChangeRegion}
+              handleFilter={handleFilter}
+              handleSearch={handleSearch}
+              handleReset={handleResetFilterAndSearch}
             />
-          ) : isSearch ? (
-            <PokemonList
-              pokemons={searchPokemons}
-              imageType={imageType}
-              handleClickPokemon={handleClickPokemon}
-            />
-          ) : (
-            <PokemonList
-              pokemons={allPokemons}
-              imageType={imageType}
-              handleClickPokemon={handleClickPokemon}
-            />
-          )}
-        </div>
-        <Loading />
-        {limit !== maxLimit && (
-          <button
-            className="btn btn-primary mx-auto hover:btn-secondary"
-            onClick={handleShowMore}
-          >
-            Show more Pokemons
-          </button>
-        )}
-      </div>
-      <Footer />
+            <div className="divider" />
+            {/* <div className="place-self-center lg:place-self-start"></div> */}
+            <div className="mt-2 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 w-full px-4">
+              {isFilter ? (
+                <PokemonList
+                  pokemons={filterPokemons}
+                  imageType={imageType}
+                  handleClickPokemon={handleClickPokemon}
+                />
+              ) : isSearch ? (
+                <PokemonList
+                  pokemons={searchPokemons}
+                  imageType={imageType}
+                  handleClickPokemon={handleClickPokemon}
+                />
+              ) : (
+                <PokemonList
+                  pokemons={allPokemons}
+                  imageType={imageType}
+                  handleClickPokemon={handleClickPokemon}
+                />
+              )}
+            </div>
+            {loading && (
+              <div className="mx-auto">
+                <Loading />
+              </div>
+            )}
+            {limit !== maxLimit && (
+              <button
+                className="btn btn-primary mx-auto hover:btn-secondary"
+                onClick={handleShowMore}
+              >
+                Show more Pokemons
+              </button>
+            )}
+          </div>
+          <Footer />
+        </>
+      )}
       <InfoModal
         pokemon={selectedPokemon}
         index={selectedPokemon.index}
