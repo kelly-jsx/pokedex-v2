@@ -3,7 +3,7 @@ import { PokeCard } from 'components/PokeCard'
 type Props = {
   pokemons: []
   imageType: string
-  handleClickPokemon: () => void
+  handleClickPokemon: (e: string) => void
 }
 
 export const PokemonList = ({
