@@ -4,13 +4,13 @@ import axios from 'axios'
 import { Type } from 'components/Type'
 
 type Props = {
-  heroPokemon: string
-  handleClick: (e: string) => void
+  pokemonName: string
+  handleClick: () => void
   imageType: string
 }
 
 export const HeroPokeCard = ({
-  heroPokemon,
+  pokemonName,
   handleClick,
   imageType
 }: Props) => {
@@ -22,11 +22,9 @@ export const HeroPokeCard = ({
     imgUrl: ''
   })
 
-  // const heroPokemon = 'charmander'
-
   const fetchPokemonData = async () => {
     return axios
-      .get(`https://pokeapi.co/api/v2/pokemon/${heroPokemon}/`)
+      .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}/`)
       .then((res) => {
         let sprites
 
@@ -49,7 +47,7 @@ export const HeroPokeCard = ({
 
   const fetchPokemonDescription = async () => {
     return axios
-      .get(`https://pokeapi.co/api/v2/pokemon-species/${heroPokemon}`)
+      .get(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`)
       .then((res) => {
         let description: string
 
@@ -96,7 +94,7 @@ export const HeroPokeCard = ({
           <label
             htmlFor="info-modal"
             className="btn-primary btn w-full hover:btn-secondary"
-            onClick={handleClick(heroPokemon)}
+            onClick={handleClick}
           >
             Show More
           </label>

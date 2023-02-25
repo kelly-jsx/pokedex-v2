@@ -13,7 +13,9 @@ import { Loading } from './Loading/Loading'
 import { LoadingSite } from './Loading/LoadingSite'
 
 export default function App() {
-  const API_URL = 'https://pokeapi.co/api/v2/'
+  const ApiUrl = 'https://pokeapi.co/api/v2/'
+
+  const heroPokemon = 'charmander'
 
   const [searchPokemons, setSearchPokemons] = useState([])
   const [isSearch, setIsSearch] = useState(false)
@@ -57,7 +59,7 @@ export default function App() {
 
   const fetchAllPokemons = async (limit: number, offset: number) => {
     const res = await axios
-      .get(`${API_URL}pokemon?limit=${limit}&offset=${offset}`)
+      .get(`${ApiUrl}pokemon?limit=${limit}&offset=${offset}`)
       .catch((err) => console.log(err))
     fetchPokemonData(res.data.results)
   }
@@ -67,7 +69,7 @@ export default function App() {
 
     await Promise.all(
       res.map((pokemon: { name: any }) => {
-        return axios.get(`${API_URL}pokemon/${pokemon.name}`).then((res) => {
+        return axios.get(`${ApiUrl}pokemon/${pokemon.name}`).then((res) => {
           pokemonArr.push(res.data)
         })
       })
@@ -80,7 +82,7 @@ export default function App() {
 
   const fetchAllRegionPokemons = async (limit: number, offset: number) => {
     const res = await axios
-      .get(`${API_URL}pokemon?limit=${limit}&offset=${offset}`)
+      .get(`${ApiUrl}pokemon?limit=${limit}&offset=${offset}`)
       .catch((err) => console.log(err))
     fetchRegionPokemonData(res.data.results)
   }
@@ -90,7 +92,7 @@ export default function App() {
 
     await Promise.all(
       res.map((pokemon: { name: any }) => {
-        return axios.get(`${API_URL}pokemon/${pokemon.name}`).then((res) => {
+        return axios.get(`${ApiUrl}pokemon/${pokemon.name}`).then((res) => {
           pokemonArr.push(res.data)
         })
       })
@@ -102,7 +104,7 @@ export default function App() {
   }
 
   const fetchPokemonDetails = async (pokemon: any) => {
-    return axios.get(`${API_URL}pokemon/${pokemon}`).then((res) => {
+    return axios.get(`${ApiUrl}pokemon/${pokemon}`).then((res) => {
       const data = res.data
 
       let sprites
@@ -132,7 +134,7 @@ export default function App() {
 
   const fetchPokemonSpecies = async (pokemon: any) => {
     try {
-      const res = await axios.get(`${API_URL}pokemon-species/${pokemon}`)
+      const res = await axios.get(`${ApiUrl}pokemon-species/${pokemon}`)
       const data = res.data
       let category: string
       let description: string
@@ -293,7 +295,11 @@ export default function App() {
         <LoadingSite />
       ) : (
         <>
-          <Hero handleClick={() => handleClickPokemon} imageType={imageType} />
+          <Hero
+            pokemon={heroPokemon}
+            handleClick={() => handleClickPokemon(heroPokemon)}
+            imageType={imageType}
+          />
           <div id="site-more" className="flex flex-col py-4">
             <SiteActions
               handleChangeImageType={handleChangeImageType}
@@ -303,6 +309,7 @@ export default function App() {
               handleReset={handleResetFilterAndSearch}
             />
             <div className="divider" />
+            {/* <div className="place-self-center lg:place-self-start"></div> */}
             <div className="mt-2 grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 w-full px-4">
               {isFilter ? (
                 <PokemonList
@@ -324,11 +331,11 @@ export default function App() {
                 />
               )}
             </div>
-            {loading && (
+            {/* {loading && (
               <div className="mx-auto">
                 <Loading />
               </div>
-            )}
+            )} */}
             {limit !== maxLimit && (
               <button
                 className="btn btn-primary mx-auto hover:btn-secondary"

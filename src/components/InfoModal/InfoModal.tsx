@@ -155,14 +155,12 @@ export const InfoModal = ({
                 </div>
                 <div>
                   <p>Evolution</p>
-                  {/* <div className="flex justify-center"> */}
                   <Evolution
                     pokemon={pokemon}
                     name={name}
                     handleClickEvo={handleClickEvo}
                     imageType={imageType}
                   />
-                  {/* </div> */}
                 </div>
               </div>
             </div>
